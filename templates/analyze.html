@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Analyzing...</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+    margin:0;
+    height:100vh;
+    font-family:'Orbitron',sans-serif;
+    background: url("{{ url_for('static', filename='analysis.jpeg') }}") no-repeat center/cover;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+}
+
+/* 🔥 FINAL POSITION (moved more down) */
+.container{
+    position:absolute;
+    top:66%;   /* 🔥 moved down from 62% → 66% */
+    left:50%;
+    transform:translate(-50%, -50%);
+    text-align:center;
+}
+
+/* TEXT */
+h1{
+    font-size:2.5rem;
+    letter-spacing:4px;
+    margin-bottom:25px;
+
+    background: linear-gradient(90deg,#00eaff,#ff4df2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    text-shadow: 
+        0 0 10px rgba(0,234,255,0.8),
+        0 0 20px rgba(255,77,242,0.8);
+}
+
+/* PROGRESS BAR */
+.progress{
+    width:500px;
+    height:10px;
+    border-radius:50px;
+    background: rgba(255,255,255,0.15);
+    overflow:hidden;
+}
+
+/* BAR */
+.bar{
+    height:100%;
+    width:0%;
+    border-radius:50px;
+
+    background: linear-gradient(90deg,#00eaff,#ff00cc);
+
+    box-shadow:
+        0 0 10px #00eaff,
+        0 0 20px #ff00cc,
+        0 0 30px #ff00cc;
+
+    animation:load 3s linear forwards;
+}
+
+@keyframes load{
+    0%{width:0%;}
+    100%{width:100%;}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>ANALYZING...</h1>
+
+    <div class="progress">
+        <div class="bar"></div>
+    </div>
+</div>
+
+<script>
+
+setTimeout(()=>{
+    let params = new URLSearchParams(window.location.search);
+
+    let category = params.get("category");
+    let confidence = params.get("confidence");
+    let threat = params.get("threat");
+
+    if(category && confidence && threat){
+        window.location.href =
+            "/result?category=" + encodeURIComponent(category) +
+            "&confidence=" + encodeURIComponent(confidence) +
+            "&threat=" + encodeURIComponent(threat);
+    } else {
+        window.location.href = "/main";
+    }
+
+},3000);
+
+</script>
+
+</body>
+</html>

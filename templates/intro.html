@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Web</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* 🌄 Background */
+.bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+ background: url("{{ url_for('static', filename='intro.jpeg') }}") no-repeat center/cover;
+  z-index: -2;
+  transform: scale(1.1);
+  transition: transform 1.5s ease;
+}
+
+/* ✨ Particles */
+#particles-js {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+/* 🧠 Layout */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100%;
+  padding-bottom: 12%;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+/* 🔘 Button */
+.btn {
+  padding: 14px 45px;
+  font-size: 1rem;
+  border-radius: 35px;
+  border: 1.5px solid rgba(255,255,255,0.6);
+  background: rgba(0, 20, 60, 0.4);
+  color: #dbefff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  letter-spacing: 1px;
+}
+
+.btn:hover {
+  border-color: #00eaff;
+  box-shadow: 0 0 15px #00eaff, 0 0 30px #7a00ff;
+  background: rgba(0, 40, 90, 0.6);
+  transform: scale(1.05);
+}
+
+/* 🚀 LOADER */
+.loader {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  transition: opacity 1s ease;
+}
+
+/* ✨ Loader Text */
+.loader h1 {
+  font-size: 2rem;
+  color: #00eaff;
+  letter-spacing: 3px;
+  animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+/* ✨ Glow */
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px #00eaff, 0 0 10px #00eaff;
+  }
+  to {
+    text-shadow: 0 0 20px #7a00ff, 0 0 40px #ff00cc;
+  }
+}
+
+/* ✨ Dots Animation */
+.dots::after {
+  content: '';
+  animation: dots 1.5s steps(3, end) infinite;
+}
+
+@keyframes dots {
+  0% { content: ''; }
+  33% { content: '.'; }
+  66% { content: '..'; }
+  100% { content: '...'; }
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding-bottom: 20%;
+  }
+
+  .btn {
+    padding: 10px 25px;
+    font-size: 0.9rem;
+  }
+
+  .loader h1 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .btn {
+    padding: 18px 60px;
+    font-size: 1.2rem;
+  }
+
+  .loader h1 {
+    font-size: 3rem;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🚀 LOADER -->
+<div class="loader" id="loader">
+  <h1>LAUNCHING THE PAGE...<span class="dots"></span></h1>
+</div>
+
+<!-- Background -->
+<div class="bg" id="bg"></div>
+
+<!-- Particles -->
+<div id="particles-js"></div>
+
+<!-- Button -->
+<div class="container" id="content">
+  <!-- ✅ UPDATED NAVIGATION -->
+  <button class="btn" onclick="goNext()">Get Started →</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+
+<script>
+particlesJS("particles-js", {
+  particles: {
+    number: { value: 80 },
+    color: { value: ["#00eaff", "#7a00ff", "#ff00cc"] },
+    shape: { type: "circle" },
+    opacity: { value: 0.6 },
+    size: { value: 3 },
+    move: { speed: 1.5 },
+    line_linked: {
+      enable: true,
+      color: "#7a00ff",
+      opacity: 0.5
+    }
+  },
+  interactivity: {
+    events: {
+      onhover: { enable: true, mode: "repulse" }
+    }
+  }
+});
+
+/* 🚀 Cinematic Loader Exit */
+window.onload = () => {
+  setTimeout(() => {
+    document.getElementById("loader").style.opacity = "0";
+
+    document.getElementById("bg").style.transform = "scale(1)";
+    document.getElementById("content").style.opacity = "1";
+
+    setTimeout(() => {
+      document.getElementById("loader").style.display = "none";
+    }, 1000);
+
+  }, 2500);
+};
+
+/* 🔗 FLASK ROUTE NAVIGATION */
+function goNext(){
+  window.location.href = "/main";  // ✅ IMPORTANT CHANGE
+}
+</script>
+
+</body>
+</html>
