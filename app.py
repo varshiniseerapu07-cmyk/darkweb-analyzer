@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import pickle
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.preprocessing.text import tokenizer_from_json
 import numpy as np
 import requests
 from bs4 import BeautifulSoup
@@ -10,25 +11,26 @@ import os
 
 app = Flask(__name__)
 
-# ✅ FIX: Lazy load model + use .keras format
+# ✅ Lazy load model
 model = None
 
 def get_model():
     global model
     if model is None:
-        model = load_model("model.keras", compile=False)   # 🔥 CHANGED HERE
+        model = load_model("model.keras", compile=False)
     return model
 
-# 🔹 Load tokenizer safely
-with open("tokenizer.pkl", "rb") as f:
-    tokenizer = pickle.load(f)
+# ✅ FIX: Load tokenizer from JSON (NO ERROR)
+with open("tokenizer.json") as f:
+    tokenizer = tokenizer_from_json(f.read())
 
 MAX_LEN = 150
 
+# Label encoder (same)
 with open("label_encoder.pkl", "rb") as f:
     le = pickle.load(f)
 
-# 🔹 Clean text
+# Clean text
 def clean_text(text):
     text = text.lower()
     text = re.sub(r"http\S+", "", text)
@@ -36,7 +38,7 @@ def clean_text(text):
     text = re.sub(r"\s+", " ", text).strip()
     return text
 
-# 🔹 Prediction
+# Prediction
 def predict_text(data):
 
     def get_text_from_url(url):
@@ -65,7 +67,6 @@ def predict_text(data):
     combined_text = f"{data['source_ip']} {data['dest_ip']} {data['protocol']} {data['packet_type']} {data['packet_size']} {input_text}"
     cleaned = clean_text(combined_text)
 
-    # ✅ Load model here
     model = get_model()
 
     seq = tokenizer.texts_to_sequences([cleaned])
@@ -77,7 +78,7 @@ def predict_text(data):
 
     text_lower = combined_text.lower()
 
-    # ✅ SAME (no change)
+    # SAME SAFE WORDS
     safe_keywords = [
     "learn","learning","course","tutorial",
     "education","ethical","training",
@@ -96,6 +97,7 @@ def predict_text(data):
     "skill development","experiment","simulation"
     ]
 
+    # SAME DANGER WORDS
     danger_map = {
     "organ":"illegal","organs":"illegal","kidney":"illegal","liver":"illegal","heart":"illegal",
     "human trafficking":"human_trafficking","trafficking":"human_trafficking",
