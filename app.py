@@ -11,7 +11,7 @@ import os
 app = Flask(__name__)
 
 # 🔹 Load model and tokenizer
-model = load_model("model.keras")
+model = load_model("model.keras",compile=False)
 with open("tokenizer.pkl", "rb") as f:
     tokenizer = pickle.load(f)
 
