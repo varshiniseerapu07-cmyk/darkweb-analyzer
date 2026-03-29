@@ -27,8 +27,10 @@ with open("tokenizer.json") as f:
 MAX_LEN = 150
 
 # Label encoder (same)
-with open("label_encoder.pkl", "rb") as f:
-    le = pickle.load(f)
+with open("labels.json") as f:
+    classes=json.load(f)
+def decode_label(index):
+    return classes[index]
 
 # Clean text
 def clean_text(text):
@@ -73,7 +75,7 @@ def predict_text(data):
     padded = pad_sequences(seq, maxlen=MAX_LEN)
     pred = model.predict(padded)
 
-    category = le.inverse_transform([np.argmax(pred)])[0]
+    category = decode_label(np.argmax(pred))
     confidence = float(np.max(pred)) * 100
 
     text_lower = combined_text.lower()
