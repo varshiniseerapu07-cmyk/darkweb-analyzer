@@ -18,7 +18,7 @@ model = None
 def get_model():
     global model
     if model is None:
-        model = load_model("model.keras", compile=False)
+        model = load_model("model.h5", compile=False)
     return model
 
 # ✅ FIX: Load tokenizer from JSON (NO ERROR)
